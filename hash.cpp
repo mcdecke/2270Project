@@ -35,31 +35,40 @@ unsigned int HashTable::hashFunction2(int key)
     return ((int) floor(key / tableSize) % tableSize);
 }
 
-node* HashTable::searchItem(int key, int hashType)
+node* HashTable::searchItem(int key, int hashType, int collRes)
 {
     int index;
-    //Compute the index by using the hash function
+    //Compute the index by hash function
     if (hashType == 1) {
       index = hashFunction(key);
     } else {
       index = hashFunction2(key);
     }
 
-
-    cout << "index " << index << endl;
-    // not in table
-    if (!table[index]) {
-      cout << "Not in table" << endl;
-      return NULL;
+    switch(collRes){
+      case 1:
+        cout << "index " << index << endl;
+        // not in table
+        if (!table[index]) {
+          cout << "Not in table" << endl;
+          return NULL;
+        }
+        return table[index];
+        break;
+      case 2:
+        break;
+      case 3:
+        break;
+      case 4:
+        break;
     }
-
-    return table[index];
+    return NULL;
 }
 
 
 //TODO Complete this function
 //function to insert
-bool HashTable::insertItem(int key, int hashType)
+bool HashTable::insertItem(int key, int hashType, int collRes)
 {
 
   int x;
@@ -71,10 +80,9 @@ bool HashTable::insertItem(int key, int hashType)
   }
 
   cout << "insert index: " << x << endl;
-
   // Use the first hash function on the key to get the index/slot,
 
-    if(!searchItem(key, hashType))
+    if(!searchItem(key, hashType, collRes))
     {
         // create a new node with the key and insert it in this slot's list
         table[x] = createNode(key, nullptr);;

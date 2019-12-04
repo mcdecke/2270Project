@@ -24,8 +24,7 @@ public:
     HashTable(int bsize);  // Constructor
 
     // inserts a key into hash table
-    bool insertItem(int key, int hashType);
-    // bool insertItem2(int key, int hashType);
+    bool insertItem(int key, int hashType, int collRes);
 
     // hash function to map values to key
     unsigned int hashFunction(int key);
@@ -33,7 +32,7 @@ public:
 
     void printTable();
 
-    node* searchItem(int key, int hashType);
+    node* searchItem(int key, int hashType, int collRes);
 };
 
 #endif

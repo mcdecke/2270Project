@@ -9,8 +9,9 @@ using namespace std;
 int chooseHash(){
 
   int hashMethod;
-
-    cout << "Choose hashing Method 1 or 2." << endl;
+    cout << "Choose hashing Method" << endl;
+    cout <<  "1: h(x) = (x)mod(tableSize)" << endl;
+    cout <<  "2: h'(x) = floor(x/table) mod x" << endl;
     cin >> hashMethod;
 
     if (hashMethod == 1 || hashMethod == 2) {
@@ -18,13 +19,32 @@ int chooseHash(){
     } else {
       chooseHash();
     }
-    return 1;
+    return hashMethod;
+}
+
+int chooseColl(){
+
+  int collMethod;
+    cout << "Choose collision Method" << endl;
+    cout << "1: Linked List" << endl;
+    cout << "2: Binary Search Tree" << endl;
+    cout <<  "3: Linear Probing" << endl;
+    cout <<  "4: Cuckoo Hash" << endl;
+    cin >> collMethod;
+
+    if (collMethod < 5 && 0 < collMethod) {
+      return collMethod;
+    } else {
+      chooseColl();
+    }
+    return collMethod;
 }
 
 int main(int argc, char* argv[])
 {
 
   int x = chooseHash();
+  int y = chooseColl();
   //set up tables
   int TABLE_SIZE = 10009;
   int pre[TABLE_SIZE];
@@ -54,14 +74,8 @@ int main(int argc, char* argv[])
 
     while (getline(fs, number, ',')) {
         num = stoi(number);
-
         cout <<"Inserting " << num << endl;
-
-        if (x == 1) {
-          ht.insertItem(num, 1);
-        } else {
-          ht.insertItem(num, 2);
-        }
+        ht.insertItem(num, x, y);
         counter++;
     }
 
