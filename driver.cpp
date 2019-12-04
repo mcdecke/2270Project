@@ -47,8 +47,6 @@ int main(int argc, char* argv[])
   int y = chooseColl();
   //set up tables
   int TABLE_SIZE = 10009;
-  int pre[TABLE_SIZE];
-  int post[TABLE_SIZE];
 
   HashTable ht(TABLE_SIZE);
 
@@ -77,6 +75,16 @@ int main(int argc, char* argv[])
         cout <<"Inserting " << num << endl;
         ht.insertItem(num, x, y);
         counter++;
+        // if (counter > (TABLE_SIZE/2) - 1) {
+        //   if (y == 3 || y == 4) {
+        //     //resize table
+        //     cout << "resize?" << endl;
+        //   }
+        // }
+        if (counter == TABLE_SIZE) {
+          cout << "full" << endl;
+          break;
+        }
     }
 
     cout << "Inserted " << counter << " elements." << endl;

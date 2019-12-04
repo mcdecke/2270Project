@@ -15,7 +15,6 @@ struct node
 class HashTable
 {
     int tableSize;  // No. of buckets (linked lists)
-
     // Pointer to an array containing buckets
     node* *table;
 
@@ -24,15 +23,18 @@ public:
     HashTable(int bsize);  // Constructor
 
     // inserts a key into hash table
-    bool insertItem(int key, int hashType, int collRes);
+    bool insertItem(int key,int hashType, int collRes);
 
     // hash function to map values to key
     unsigned int hashFunction(int key);
     unsigned int hashFunction2(int key);
 
     void printTable();
+    void llInsert(int key, int index, int hashType, int collRes);
+    void lpInsert(int key, int index, int loop, int hashType, int collRes);
 
-    node* searchItem(int key, int hashType, int collRes);
+
+    node* searchItem(int key,  int index, int hashType, int collRes);
 };
 
 #endif
