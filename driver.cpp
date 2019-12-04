@@ -63,11 +63,11 @@ int main(int argc, char* argv[])
           ht.insertItem(num, 2);
         }
         counter++;
-  }
+    }
 
-  cout << "Inserted " << counter << " elements." << endl;
+    cout << "Inserted " << counter << " elements." << endl;
 
-  ht.printTable();
+    ht.printTable();
 
     return 0;
 }

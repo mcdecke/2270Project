@@ -81,13 +81,18 @@ bool HashTable::insertItem(int key, int hashType)
         cout << "inserted " << key << " at " << x << endl;
      }
     else{
-        while (table[x]->next != nullptr) {
-          cout << key <<  " collided with " << table[x]->key << endl;
-          table[x] = table[x]->next;
-        }
-        if (table[x]->next == nullptr){
 
-          table[x]->next = createNode(key, nullptr);
+      node* d = table[x];
+      cout << d->key;
+
+        while (d->next != nullptr) {
+          cout << key <<  " collided with " << d->next->key << endl;
+          d = d->next;
+        }
+
+
+        if (d->next == nullptr){
+          d->next = createNode(key, nullptr);
           cout << "post collision inserted " << key << endl;
         }
     }
