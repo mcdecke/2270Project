@@ -1,5 +1,6 @@
 // CPP program to implement hashing with chaining
 #include<iostream>
+#include <math.h>
 #include "hash.hpp"
 
 
@@ -27,41 +28,68 @@ unsigned int HashTable::hashFunction(int key)
     return (key % tableSize);
 }
 
-// TODO Complete this function
-//function to search
-node* HashTable::searchItem(int key)
+//function to calculate hash function
+unsigned int HashTable::hashFunction2(int key)
 {
+    cout << "floor returning " << (int) floor(key / tableSize) % tableSize << endl;
+    return ((int) floor(key / tableSize) % tableSize);
+}
+
+node* HashTable::searchItem(int key, int hashType)
+{
+    int index;
     //Compute the index by using the hash function
-    int index = hashFunction(key);
-    //TODO: Search the list at that specific index and return the node if found
+    if (hashType == 1) {
+      index = hashFunction(key);
+    } else {
+      index = hashFunction2(key);
+    }
+
+
+    cout << "index " << index << endl;
+    // not in table
     if (!table[index]) {
+      cout << "Not in table" << endl;
       return NULL;
     }
+
     return table[index];
 }
 
+
 //TODO Complete this function
 //function to insert
-bool HashTable::insertItem(int key)
+bool HashTable::insertItem(int key, int hashType)
 {
-  // TODO :
-  // Use the hash function on the key to get the index/slot,
 
-  int x = hashFunction(key);
-    if(!searchItem(key))
+  int x;
+
+  if (hashType == 1) {
+    x = hashFunction(key);
+  } else {
+    x = hashFunction2(key);
+  }
+
+  cout << "insert index: " << x << endl;
+
+  // Use the first hash function on the key to get the index/slot,
+
+    if(!searchItem(key, hashType))
     {
         // create a new node with the key and insert it in this slot's list
         table[x] = createNode(key, nullptr);;
-
+        cout << "inserted " << key << " at " << x << endl;
      }
     else{
-        if (table[x]->next != nullptr) {
+        while (table[x]->next != nullptr) {
+          cout << key <<  " collided with " << table[x]->key << endl;
+          table[x] = table[x]->next;
+        }
+        if (table[x]->next == nullptr){
 
-        }
-        else {
           table[x]->next = createNode(key, nullptr);
+          cout << "post collision inserted " << key << endl;
         }
-        return false;
     }
     return true;
 }

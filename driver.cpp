@@ -3,14 +3,28 @@
 #include <string>
 #include <sstream>
 #include <fstream>
-#include "hash.hpp"
+#include "hash.cpp"
 using namespace std;
 
+int chooseHash(){
 
+  int hashMethod;
 
-int main()
+    cout << "Choose hashing Method 1 or 2." << endl;
+    cin >> hashMethod;
+
+    if (hashMethod == 1 || hashMethod == 2) {
+      return hashMethod;
+    } else {
+      chooseHash();
+    }
+    return 1;
+}
+
+int main(int argc, char* argv[])
 {
 
+  int x = chooseHash();
   //set up tables
   int TABLE_SIZE = 10009;
   int pre[TABLE_SIZE];
@@ -33,40 +47,27 @@ int main()
     //
     // // 10009 is count of buckets in hash table
 
-    int number;
+    string number;
+    int num;
+    int place;
     int counter = 0;
 
-    	while (getline(fs, number, ',')) {
-        cout << counter << " + " << number << endl;
-        counter++;
-    //
-    // // insert the keys into the hash table.
+    while (getline(fs, number, ',')) {
+        num = stoi(number);
 
-    // for (int i = 0; i < n; i++) {
-    //     ht.insertItem(a[i]);
-    // }
-    //
-    // cout<< "Contents of the hash table are"<<endl;
-    // // SILVER TODO : Complete printTable() function
-    // ht.printTable();
-    //
-    // cout<<endl;
-    //
-    // int searchFor = 9;
-    // // SILVER TODO : Complete searchItem() function
-    // if(ht.searchItem(searchFor))
-    //  {
-    //    cout<<searchFor<<" found in the hash table"<<endl;
-    //  }
-    // else{
-    //   cout<<searchFor<<" not found in the hash table"<<endl;
-    // }
-    // cout<<"------------------------------------"<<endl;
-    //
-    // int sum = 19;
-    //
-    // // GOLD TODO Complete printPairs() function
-    // printPairs(a,n,sum,ht);
+        cout <<"Inserting " << num << endl;
+
+        if (x == 1) {
+          ht.insertItem(num, 1);
+        } else {
+          ht.insertItem(num, 2);
+        }
+        counter++;
+  }
+
+  cout << "Inserted " << counter << " elements." << endl;
+
+  ht.printTable();
 
     return 0;
 }

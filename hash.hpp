@@ -24,14 +24,16 @@ public:
     HashTable(int bsize);  // Constructor
 
     // inserts a key into hash table
-    bool insertItem(int key);
+    bool insertItem(int key, int hashType);
+    // bool insertItem2(int key, int hashType);
 
     // hash function to map values to key
     unsigned int hashFunction(int key);
+    unsigned int hashFunction2(int key);
 
     void printTable();
 
-    node* searchItem(int key);
+    node* searchItem(int key, int hashType);
 };
 
 #endif
