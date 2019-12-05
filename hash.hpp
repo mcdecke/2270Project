@@ -10,6 +10,8 @@ struct node
 {
     int key;
     struct node* next;
+    struct node* left;
+    struct node* right;
 };
 
 class HashTable
@@ -19,6 +21,8 @@ class HashTable
     node* *table;
 
     node* createNode(int key, node* next);
+    node* createBSTNode(int key);
+
 public:
     HashTable(int bsize);  // Constructor
 
@@ -33,8 +37,11 @@ public:
     void llInsert(int key, int index, int hashType, int collRes);
     void lpInsert(int key, int index, int loop, int hashType, int collRes);
 
+    void bstInsert(int key, int index, int hashType, int collRes);
+    node* addNodeHelper(node* currNode, int key);
 
     node* searchItem(int key,  int index, int hashType, int collRes);
+    node* searchKeyHelper(node* currNode, int data);
 };
 
 #endif

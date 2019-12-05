@@ -72,24 +72,26 @@ int main(int argc, char* argv[])
 
     while (getline(fs, number, ',')) {
         num = stoi(number);
-        cout <<"Inserting " << num << endl;
+        // cout <<"Inserting " << num << endl;
         ht.insertItem(num, x, y);
         counter++;
+
         // if (counter > (TABLE_SIZE/2) - 1) {
         //   if (y == 3 || y == 4) {
         //     //resize table
         //     cout << "resize?" << endl;
         //   }
         // }
-        if (counter == TABLE_SIZE) {
-          cout << "full" << endl;
-          break;
-        }
+
+        // if (counter == TABLE_SIZE) {
+        //   cout << "full" << endl;
+        //   break;
+        // }
     }
 
     cout << "Inserted " << counter << " elements." << endl;
 
-    ht.printTable();
+    // ht.printTable();
 
     return 0;
 }
