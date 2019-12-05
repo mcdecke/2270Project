@@ -49,6 +49,7 @@ int main(int argc, char* argv[])
   int TABLE_SIZE = 10009;
 
   HashTable ht(TABLE_SIZE);
+  HashTable ht2(TABLE_SIZE);
 
     string filename = "";
   	if (argc < 2) {
@@ -73,6 +74,20 @@ int main(int argc, char* argv[])
     while (getline(fs, number, ',')) {
         num = stoi(number);
         // cout <<"Inserting " << num << endl;
+
+        if (y == 4) {
+          if (ht.searchItem(num, ht.insertItem(num, x, y), x, y)) {
+            cout << "collide" << endl;
+            //move original to new
+            ht2.insertItem(num, x, y);
+              if (ht2.searchItem(num, ht2.insertItem(num, x, y), x, y)) {
+                cout << "double collide, resize" << endl;
+
+                break;
+              }
+          }
+        }
+
         ht.insertItem(num, x, y);
         counter++;
 

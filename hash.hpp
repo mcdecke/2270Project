@@ -19,6 +19,7 @@ class HashTable
     int tableSize;  // No. of buckets (linked lists)
     // Pointer to an array containing buckets
     node* *table;
+    node* *table2;
 
     node* createNode(int key, node* next);
     node* createBSTNode(int key);
@@ -36,6 +37,9 @@ public:
     void printTable();
     void llInsert(int key, int index, int hashType, int collRes);
     void lpInsert(int key, int index, int loop, int hashType, int collRes);
+
+    void cuckooInsert(int key, int index, int loop, int hashType, int collRes);
+
 
     void bstInsert(int key, int index, int hashType, int collRes);
     node* addNodeHelper(node* currNode, int key);

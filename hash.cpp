@@ -6,15 +6,6 @@
 
 using namespace std;
 
-// node* HashTable::createBSTNode(int key)
-// {
-//     node* newNode = new node;
-//     newNode->key = key;
-//     newNode->left = NULL;
-//     newNode->right = NULL;
-//     return newNode;
-// }
-
 node* HashTable::createNode(int key, node* next)
 {
     node* nw = new node;
@@ -24,8 +15,6 @@ node* HashTable::createNode(int key, node* next)
     nw->right = NULL;
     return nw;
 }
-
-
 
 HashTable::HashTable(int bsize)
 {
@@ -70,43 +59,12 @@ node* HashTable::searchKeyHelper(node* currNode, int key){
 node* HashTable::searchItem(int key, int index, int hashType, int collRes)
 {
 
-
-  node* tree;
-    switch(collRes){
-      cout << "collision at: " << index << endl;
-      case 1:
-        if (!table[index]) {
-          // cout << "Not in table" << endl;
-          return NULL;
-        }
-        return table[index];
-        break;
-      case 2:
-        if (!table[index]) {
-          // cout << "Not in table" << endl;
-          return NULL;
-        }
-        // else {
-        //   tree = searchKeyHelper(table[index], key);
-        //    if(tree != NULL) {
-        //        cout << "found key" << endl;
-        //        return tree;
-        //    }
-        // }
-        // cout<<"Key not present in the tree"<<endl;
-        return table[index];
-        break;
-      case 3:
-        if (!table[index]) {
-          // cout << "Not in table" << endl;
-          return NULL;
-        }
-        return table[index];
-        break;
-      case 4:
-        break;
-    }
+  if (!table[index]) {
+    // cout << "Not in table" << endl;
     return NULL;
+  }
+  return table[index];
+
 }
 
 void HashTable::llInsert(int key, int x, int hashType, int collRes){
@@ -174,8 +132,25 @@ void HashTable::lpInsert(int key, int index, int loop, int hashType, int collRes
   return;
 }
 
-//TODO Complete this function
-//function to insert
+
+
+void HashTable::cuckooInsert(int key, int index, int loop, int hashType, int collRes){
+
+  int temp = table[index]->key;
+
+  table[index]->key = key;
+
+  // if (hashType == 1) {
+  //   table2->insertItem(temp, 2, collRes);
+  // }
+  // else{
+  //   table2->insertItem(temp, 1, collRes);
+  // }
+
+  return;
+}
+
+//main insert function
 bool HashTable::insertItem(int key, int hashType, int collRes)
 {
   int index;
@@ -195,19 +170,20 @@ bool HashTable::insertItem(int key, int hashType, int collRes)
   }
    //otherwise, switch on coll type.
   else {
-    cout << "collision res: " << collRes << endl;
+    // cout << "collision res: " << collRes << endl;
     switch(collRes){
       case 1:
         llInsert(key, index, hashType, collRes);
         break;
       case 2:
-        cout << key << " collision on " << index << endl;
+        // cout << key << " collision on " << index << endl;
         bstInsert(key, index, hashType, collRes);
         break;
       case 3:
         lpInsert(key, index, index, hashType, collRes);
         break;
       case 4:
+        cuckooInsert(key, index, index, hashType, collRes);
         break;
       default:
         break;
