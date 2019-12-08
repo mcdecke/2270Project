@@ -1,0 +1,313 @@
+ \documentclass[11pt]{article}
+
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amscd}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{siunitx}
+\usepackage{pgfplots}
+
+
+\pgfplotsset{width=10cm, compat=newest} % Allows to place the legend below plot
+\usepgfplotslibrary{units} % Allows to enter the units nicely
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem*{example}{Example}
+\newtheorem*{remark}{Remark}
+\newtheorem*{remarks}{Remarks}
+
+\numberwithin{equation}{section}
+
+\newcommand{\ZZ}{\mathbb{Z}}
+
+\setlength{\evensidemargin}{1in}
+\addtolength{\evensidemargin}{-1in}
+\setlength{\oddsidemargin}{1.5in}
+\addtolength{\oddsidemargin}{-1.5in}
+\setlength{\topmargin}{1in}
+\addtolength{\topmargin}{-1.5in}
+
+\setlength{\textwidth}{16cm}
+\setlength{\textheight}{23cm}
+
+
+\newcommand{\rook}{\hspace{-.1cm}\amalg\hspace{-.15cm}\bar{}}
+\newcommand{\scscs}{\scriptscriptstyle} 
+\newcommand{\scs}{\scriptstyle}
+
+
+
+
+\begin{document}
+
+\title{Data Type Graphs}
+\author{Mac Decker} 
+\date{\today}
+
+\maketitle
+
+\section{Introduction}
+Given two different hashing algorithms and four types of collision resolution: linear probing, chaining with a linked list, chaining with a binary search tree and cuckoo hashing; our goal is to compare the time performance of the insertion, deletion and lookup of a group of 100 elements at various load factors. 
+
+\section{Procedure}
+We will use an array of binary search trees with a left and right pointer to store our hashed data for each type of collision resolution. 
+\begin{itemize}
+	\item The linear probing implementation only needs the base array to store our data. 
+	\item Utilizing only the left branch will give us the functionality of a linked list.
+	\item Adding the right branch and forcing balancing will give us the functionality of our binary search tree. 
+	\item For the cuckoo hashing we first try to put the hashed value in our array and if there is a collision we try the second hash function, this so far only requires the base array. If there is a collision again at the second hash value, the new item overwrites the original collision, and the overwritten number is moved to the second hash value. This can cause a cycle if something would eventually move itself. Keeping track of what moved an item and what it moved in the left and right pointers of the binary search tree will allow us to know when we have a loop, if an item shows up twice on one branch, which will let us know when to resize the array.
+\end{itemize} 
+
+The program times the insert, delete and search functions in groups of 100 to get measurable results.
+
+
+\section{Graphs}
+
+\begin{tikzpicture}
+  \begin{axis}[ 
+    title={Linked List Preformance vs. Load},
+    xlabel={Load},
+    ylabel={mean time - ($\mu$ s)}
+  ] 
+    \addplot [
+    	color=blue,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 108)(.2,98)(.5,62)(.7,63)(.9,57)(1,54)(2,48)(3,52)(3.9,63)
+    };
+    ] 
+     \addplot [
+    	color=red,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 134)(.2,156)(.5,124)(.7,99)(.9,117)(1,118)(2,166)(3,181)(3.9,246)
+    };
+    ] 
+    ] 
+     \addplot [
+    	color=yellow,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 123)(.2,101)(.5,96)(.7,92)(.9,96)(1,95)(2,131)(3,184)(3.9,230)
+    };
+    \legend{Insert, Lookup, Delete}
+    ] 
+  \end{axis}
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+  \begin{axis}[ 
+    title={Binary Search Tree Preformance vs. Load},
+    xlabel={Load},
+    ylabel={median time - ($\mu$ s)}
+  ] 
+    \addplot [
+    	color=blue,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 99)(.2,105)(.5,63)(.7,60)(.9,55)(1,60)(3.9,50)
+    };
+    ] 
+     \addplot [
+    	color=red,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 135)(.2,126)(.5,116)(.7,126)(.9,121)(1,125)(3.9,165)
+    };
+    ] 
+    ] 
+     \addplot [
+    	color=yellow,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 122)(.2,78)(.5,80)(.7,90)(.9,92)(1,92)(3.9,123)
+    };
+    \legend{Insert, Lookup, Delete}
+    ] 
+  \end{axis}
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+  \begin{axis}[ 
+    title={Linear Probing Performance vs. Load},
+    xlabel={Load},
+    ylabel={median time - ($\mu$ s)}
+  ] 
+    \addplot [
+    	color=blue,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 99)(.2,69)(.5,63)(.7,69)(.9,91)(1,1528)
+    };
+    ] 
+     \addplot [
+    	color=red,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 61)(.2,132)(.5,329)(.7,398)(.9,359)(1,315)
+    };
+    ] 
+    ] 
+     \addplot [
+    	color=yellow,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 102)(.2,122)(.5,286)(.7,342)(.9,335)(1,313)
+    };
+    \legend{Insert, Lookup, Delete}
+    ] 
+  \end{axis}
+\end{tikzpicture}
+
+
+
+
+\begin{tikzpicture}
+  \begin{axis}[ 
+    title={Insert Performances vs. Load},
+    xlabel={Load},
+    ylabel={median time - ($\mu$ s)}
+  ] 
+    \addplot [
+    	color=blue,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 108)(.2,98)(.5,62)(.7,63)(.9,57)(1,54)(2,48)(3,52)(3.9,63)
+    };
+    ] 
+     \addplot [
+    	color=red,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 99)(.2,105)(.5,63)(.7,60)(.9,55)(1,60)(3.9,50)
+    };
+    ] 
+    ] 
+     \addplot [
+    	color=yellow,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 99)(.2,69)(.5,63)(.7,69)(.9,91)(1,1528)
+    };
+    \legend{Linked List, BST, Linear Probing}
+    ] 
+  \end{axis}
+\end{tikzpicture}
+
+
+
+\begin{tikzpicture}
+  \begin{axis}[ 
+    title={Lookup Performances vs. Load},
+    xlabel={Load},
+    ylabel={median time - ($\mu$ s)}
+  ] 
+    \addplot [
+    	color=blue,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 134)(.2,156)(.5,124)(.7,99)(.9,117)(1,118)(2,166)(3,181)(3.9,246)
+    };
+    ] 
+     \addplot [
+    	color=red,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 135)(.2,126)(.5,116)(.7,126)(.9,121)(1,125)(3.9,165)
+    };
+    ] 
+    ] 
+     \addplot [
+    	color=yellow,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 61)(.2,132)(.5,329)(.7,398)(.9,359)(1,315)
+    };
+    \legend{Linked List, BST, Linear Probing}
+    ] 
+  \end{axis}
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+  \begin{axis}[ 
+    title={Delete Performances vs. Load},
+    xlabel={Load},
+    ylabel={median time - ($\mu$ s)}
+  ] 
+    \addplot [
+    	color=blue,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 123)(.2,101)(.5,96)(.7,92)(.9,96)(1,95)(2,131)(3,184)(3.9,230)
+    };
+    ] 
+     \addplot [
+    	color=red,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 122)(.2,78)(.5,80)(.7,90)(.9,92)(1,92)(3.9,123)
+    };
+    ] 
+    ] 
+     \addplot [
+    	color=yellow,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 102)(.2,122)(.5,286)(.7,342)(.9,335)(1,313)
+    };
+    \legend{Linked List, BST, Linear Probing}
+    ] 
+  \end{axis}
+\end{tikzpicture}
+
+\section{Results}
+	A close analysis of the graphs shows a few things. 
+	\begin{itemize}
+		\item Inserting a value is faster than deleting and searching, unless trying to insert into a full array. Deleting also appears faster than searching, but they were typically close together. 
+		\item Linear probing scales the worst with load.
+		\item Binary search tree outperforms linked list for collision resolution.
+	\end{itemize}
+	
+	The general performances of inserting, deleting and searching is consistent with what was expected from the code. The insert function typically can insert the value, and if not it resolves the collision until it finds a spot and continues, so part of the time there is never a second step. The delete function and search function both search in the initial array location, and have to compare that to their key before being able to attempt any collision resolution, so it makes sense that they take longer to perform. 
+\\
+	The decrease in linear probings performance after the load was around .8 is unexpected, as well as the increase in performance time at smaller loads for all of the resolution types. A larger data set, and better equipment, would help us see if the numbers are consistent.
+
+
+\end{document}
+
+
+

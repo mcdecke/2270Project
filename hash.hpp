@@ -9,7 +9,6 @@ using namespace std;
 struct node
 {
     int key;
-    struct node* next;
     struct node* left;
     struct node* right;
 };
@@ -21,7 +20,7 @@ class HashTable
     node* *table;
     node* *table2;
 
-    node* createNode(int key, node* next);
+    node* createNode(int key, node* left);
     node* createBSTNode(int key);
 
 public:

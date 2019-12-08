@@ -8,11 +8,10 @@
 using namespace std;
 
 
-node* HashTable::createNode(int key, node* next)
+node* HashTable::createNode(int key, node* left)
 {
     node* nw = new node;
     nw->key = key;
-    nw->next = next;
     nw->left = NULL;
     nw->right = NULL;
     return nw;
@@ -76,11 +75,11 @@ node* HashTable::searchItem(int index, int key, int hashType, int collRes)
 
   if (collRes == 1) {
     node* d = table[index];
-      while (d->next != nullptr) {
+      while (d->left != nullptr) {
         if (d->key == key){
           return d;
         }
-        d = d->next;
+        d = d->left;
       }
     }
 
@@ -122,7 +121,7 @@ bool HashTable::llDelete(int index, int key, int hashType, int collRes){
   }
 
     node* d = table[index];
-      while (d->next != nullptr) {
+      while (d->left != nullptr) {
         // cout << d->key <<" , ";
           if (d->key == key){
             cout << "deleted " <<key << endl;
@@ -130,7 +129,7 @@ bool HashTable::llDelete(int index, int key, int hashType, int collRes){
             // cout << "returning true" << endl;
             return true;
           }
-        d = d->next;
+        d = d->left;
       }
       // cout << "returning false" << endl;
   return false;
@@ -138,11 +137,11 @@ bool HashTable::llDelete(int index, int key, int hashType, int collRes){
 
 void HashTable::llInsert(int key, int x, int hashType, int collRes){
     node* d = table[x];
-      while (d->next != nullptr) {
-        d = d->next;
+      while (d->left != nullptr) {
+        d = d->left;
       }
-      if (d->next == nullptr){
-        d->next = createNode(key, nullptr);
+      if (d->left == nullptr){
+        d->left = createNode(key, nullptr);
       }
   return;
 }
@@ -355,9 +354,9 @@ void HashTable::printTable()
           node* d = table[hashFunction(i)];
           cout << d->key;
 
-          while (d->next != nullptr) {
-            cout << ", " << d->next->key;
-            d = d->next;
+          while (d->left != nullptr) {
+            cout << ", " << d->left->key;
+            d = d->left;
           }
         }
          cout << endl;
