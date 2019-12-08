@@ -13,6 +13,49 @@ int TABLE_SIZE = 10009;
 HashTable ht(TABLE_SIZE);
 HashTable ht2(TABLE_SIZE);
 
+//cin methods
+int chooseHash(){
+
+  int hashMethod;
+    cout << "Choose hashing Method" << endl;
+    cout <<  "1: h(x) = (x)mod(tableSize)" << endl;
+    cout <<  "2: h'(x) = floor(x/table) mod x" << endl;
+    cin >> hashMethod;
+
+    if (hashMethod == 1 || hashMethod == 2) {
+      return hashMethod;
+    } else {
+      chooseHash();
+    }
+    return hashMethod;
+}
+
+double chooseLoad(){
+
+  double load;
+    cout << "Enter load as decimal: " << endl;
+    cin >> load;
+    return load;
+}
+
+int chooseColl(){
+
+  int collMethod;
+    cout << "Choose collision Method" << endl;
+    cout << "1: Linked List" << endl;
+    cout << "2: Binary Search Tree" << endl;
+    cout <<  "3: Linear Probing" << endl;
+    cout <<  "4: Cuckoo Hash" << endl;
+    cin >> collMethod;
+
+    if (collMethod < 5 && 0 < collMethod) {
+      return collMethod;
+    } else {
+      chooseColl();
+    }
+    return collMethod;
+}
+
 //timer functions
 int start(){
   int startTime, endTime;
@@ -48,6 +91,7 @@ void getRandom(int holder[], ofstream& randomFile){
   return;
 }
 
+
 //Times the delete of 100 items from the list to see if they are in the load.
 //Returns the time taken.
 void deleter(ofstream& myfile, int hashType, int collRes){
@@ -65,8 +109,7 @@ void deleter(ofstream& myfile, int hashType, int collRes){
       holder[count] = num;
       count++;
   }
-  //gets correct index based on hash
-  count = 0;
+  //for each index, gets correct index based on hash
     for (int i = 0; i < 100; i++) {
       int index;
       if (hashType == 1) {
@@ -76,12 +119,9 @@ void deleter(ofstream& myfile, int hashType, int collRes){
       }
       //deletes if it is found.
       if (ht.searchItem(index, holder[i], hashType, collRes)) {
-         if(ht.deleteItem(index, holder[i], hashType, collRes) == 0){
-           count++;
-         }
+          ht.deleteItem(index, holder[i], hashType, collRes);
       }
     }
-  cout << "deleted " << count << " items." << endl;
   stop(t, myfile);
 }
 
@@ -110,92 +150,13 @@ void lookUp(ofstream& myfile, int hashType, int collRes){
       }
 
       if (ht.searchItem(index, holder[i], hashType, collRes)) {
-        // cout <<  "found "<<holder[i] << endl;
-        count++;
+        cout <<  "found "<< holder[i] << endl;
       } else {
         // cout <<  "didn't find "<<holder[i] << endl;
       }
     }
-  cout << count << " things from table" << endl;
   stop(t, myfile);
 }
-
-
-
-
-
-int chooseHash(){
-
-  int hashMethod;
-    cout << "Choose hashing Method" << endl;
-    cout <<  "1: h(x) = (x)mod(tableSize)" << endl;
-    cout <<  "2: h'(x) = floor(x/table) mod x" << endl;
-    cin >> hashMethod;
-
-    if (hashMethod == 1 || hashMethod == 2) {
-      return hashMethod;
-    } else {
-      chooseHash();
-    }
-    return hashMethod;
-}
-
-double chooseLoad(){
-
-  double load;
-    cout << "Enter load as decimal: " << endl;
-    cin >> load;
-    return load;
-}
-
-
-int chooseColl(){
-
-  int collMethod;
-    cout << "Choose collision Method" << endl;
-    cout << "1: Linked List" << endl;
-    cout << "2: Binary Search Tree" << endl;
-    cout <<  "3: Linear Probing" << endl;
-    cout <<  "4: Cuckoo Hash" << endl;
-    cin >> collMethod;
-
-    if (collMethod < 5 && 0 < collMethod) {
-      return collMethod;
-    } else {
-      chooseColl();
-    }
-    return collMethod;
-}
-
-// int hash(int x, int key, int y){
-//   switch (x){
-//     case 1: ht.insertItem(key, x, y);
-//     case 2: ht.insertItem(key, x, y);
-//   }
-// }
-
-// void place(int key, int index, int cnt, int n){
-//
-//   if(cnt == n){
-//     cout << "cycle present, resize" << endl;
-//     return;
-//   }
-//
-//   for (int i = 0; i < 2; i++) {
-//     positions[i] = hash(i+1, key);
-//     if (table[positions[i]] == key) {
-//       return;
-//     }
-//   }
-// }
-//
-// void cuckoo(int key, int n){
-//   for (int i, count = 0; i < n; i++, count = 0;) {
-//     place(key, 0, count, n);
-//   }
-// }
-
-
 
 
 int main(int argc, char* argv[])
@@ -269,15 +230,48 @@ int main(int argc, char* argv[])
 
     cout << "Inserted " << counter << " elements." << endl;
 
-
+    //creates file of numbers randomly picked from dataset.
     // getRandom(holder, randomFile);
 
     lookUp(myfile, x, y);
 
-    // deleter(myfile, x, y);
+    deleter(myfile, x, y);
 
     // ht.printTable();
 
 
     return 0;
 }
+
+
+
+
+
+
+// int hash(int x, int key, int y){
+//   switch (x){
+//     case 1: ht.insertItem(key, x, y);
+//     case 2: ht.insertItem(key, x, y);
+//   }
+// }
+
+// void place(int key, int index, int cnt, int n){
+//
+//   if(cnt == n){
+//     cout << "cycle present, resize" << endl;
+//     return;
+//   }
+//
+//   for (int i = 0; i < 2; i++) {
+//     positions[i] = hash(i+1, key);
+//     if (table[positions[i]] == key) {
+//       return;
+//     }
+//   }
+// }
+//
+// void cuckoo(int key, int n){
+//   for (int i, count = 0; i < n; i++, count = 0;) {
+//     place(key, 0, count, n);
+//   }
+// }

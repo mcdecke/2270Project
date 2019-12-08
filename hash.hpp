@@ -45,17 +45,18 @@ public:
     // - insert
     void bstInsert(int key, int index, int hashType, int collRes);
     node* addNodeHelper(node* currNode, int key);
+    // - search
+    void bstSearch(int key, int index, int hashType, int collRes);
+    node* searchNodeHelper(node* currNode, int key);
     // - delete
     void bstDelete(int key, int index, int hashType, int collRes);
     node* deleteNodeHelper(node* currNode, int key);
 
     //Linear Probing
-    // void lpDelete(int key, int index, int loop, int hashType, int collRes);
     bool lpInsert(int key, int index, int loop, int hashType, int collRes);
-
+    bool lpDelete(int key, int index, int loop, int hashType, int collRes);
 
     void cuckooInsert(int key, int index, int loop, int hashType, int collRes);
-
 
     node* searchItem(int index, int key, int hashType, int collRes);
     node* searchKeyHelper(node* currNode, int data);
