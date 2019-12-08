@@ -89,7 +89,6 @@ node* HashTable::searchItem(int index, int key, int hashType, int collRes)
     }
 
     if (collRes == 3) {
-      cout << key << endl;
       int loop = index;
       while (index + 1 != loop) {
         // cout << index << " : "<<loop << endl;
@@ -98,12 +97,12 @@ node* HashTable::searchItem(int index, int key, int hashType, int collRes)
             index = 0;
           }
           if (table[index] && table[index]->key == key) {
-            cout << "found - " << key << endl;
+            // cout << "found - " << key << endl;
             return table[index];
           }
         index++;
       }
-      cout <<"table fully searched - not found" << endl;
+      // cout <<"table fully searched - not found" << endl;
       return NULL;
     }
   return NULL;

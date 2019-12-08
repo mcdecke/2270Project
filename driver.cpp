@@ -150,7 +150,7 @@ void lookUp(ofstream& myfile, int hashType, int collRes){
       }
 
       if (ht.searchItem(index, holder[i], hashType, collRes)) {
-        cout <<  "found "<< holder[i] << endl;
+        cout <<  "!found "<< holder[i] << endl;
       } else {
         // cout <<  "didn't find "<<holder[i] << endl;
       }
