@@ -43,8 +43,6 @@ unsigned int HashTable::hashFunction2(int key)
 }
 
 
-
-
 node* HashTable::searchKeyHelper(node* currNode, int key){
 
     if(currNode == NULL){
@@ -63,25 +61,23 @@ node* HashTable::searchKeyHelper(node* currNode, int key){
 
 node* HashTable::searchItem(int index, int key, int hashType, int collRes)
 {
-  cout << key<< " keys: searching for id " << index << endl;
   if (!table[index]) {
-    cout << key << " not in table" << endl;
-    if (collRes == 4 && !table2[index]) {
-      // cout << "not in either table" << endl;
-      return NULL;
-    }
+    //for Cuckoo
+    // if (collRes == 4 && !table2[index]) {
+    //   // cout << "not in either table" << endl;
+    //   return NULL;
+    // }
     return NULL;
   }
 
   if (table[index]->key == key){
-    cout << "found " << key << endl;
     return table[index];
   }
 
   if (collRes == 1) {
     node* d = table[index];
           while (d->next != nullptr) {
-              cout << " looking at " << d->key << endl;
+              // cout << " looking at " << d->key << endl;
               if (d->key == key){
                 cout << "!!!found " << key << endl;
                 return d;
@@ -89,24 +85,54 @@ node* HashTable::searchItem(int index, int key, int hashType, int collRes)
               d = d->next;
           }
     }
+
+    if (collRes == 2) {
+
+    }
+
+    if (collRes == 3) {
+
+      int i = index + 1;
+
+      while (table[i] != table[index]) {
+        if (i >= tableSize) {
+          i = -1;
+        }
+        if (table[i] && table[i]->key == key){
+          cout << "found it" << endl;
+          return table[i];
+        }
+        i++;
+      }
+
+    }
+
+
+
+
   return table[index];
 }
 
+//////////////
+//LINKED LIST
+////////////
 
-void HashTable::llDelete(int key, int x, int hashType, int collRes){
-  cout << "!!!" << endl;
-    node* d = table[x];
+bool HashTable::llDelete(int index, int key, int hashType, int collRes){
+  // cout << "!"<<key << endl;
+    node* d = table[index];
       while (d->next != nullptr) {
+        // cout << d->key <<" , ";
           if (d->key == key){
-            cout << "deleted " <<key << endl;
+            // cout << "deleted " <<key << endl;
             d->key = -1;
-            return;
+            cout << "returning true" << endl;
+            return true;
           }
         d = d->next;
       }
-  return;
+      // cout << "returning false" << endl;
+  return false;
 }
-
 
 void HashTable::llInsert(int key, int x, int hashType, int collRes){
     node* d = table[x];
@@ -119,10 +145,31 @@ void HashTable::llInsert(int key, int x, int hashType, int collRes){
   return;
 }
 
+//////
+//BST
+////
+
+node* HashTable::deleteNodeHelper(node* currNode, int data)
+{
+    if(currNode->key == data){
+        currNode->key = -1;
+    }
+    else if(currNode->key < data){
+        currNode->right = addNodeHelper(currNode->right,data);
+    }
+    else if(currNode->key > data){
+        currNode->left = addNodeHelper(currNode->left, data);
+    }
+    return currNode;
+}
+
+void HashTable::bstDelete(int key, int index, int hashType, int collRes){
+  table[index] = deleteNodeHelper(table[index], key);
+  return;
+}
 
 node* HashTable::addNodeHelper(node* currNode, int data)
 {
-
     if(currNode == NULL){
         return createNode(data, nullptr);
     }
@@ -132,7 +179,6 @@ node* HashTable::addNodeHelper(node* currNode, int data)
     else if(currNode->key > data){
         currNode->left = addNodeHelper(currNode->left, data);
     }
-
     return currNode;
 }
 
@@ -141,32 +187,39 @@ void HashTable::bstInsert(int key, int index, int hashType, int collRes){
   return;
 }
 
+//////////////////
+//Linear Probing
+////////////////
 
-void HashTable::lpInsert(int key, int index, int loop, int hashType, int collRes){
+bool HashTable::lpInsert(int key, int index, int loop, int hashType, int collRes){
 
-  if (index + 1 == tableSize) {
+  if (index >= tableSize) {
+    cout << "loopin" << endl;
     index = -1;
   }
   if (index + 1 == loop) {
-    return;
+    cout <<"table full - insert denied" << endl;
+    //resize array?
+    return false;
+    // exit(false);
   }
   if (!table[index + 1]){
-      node* d = createNode(key, nullptr);
-      return;
+    //insert in next slot
+      table[index + 1] = createNode(key, nullptr);
+      return true;
   }
   else {
+    // cout << "movin'" << endl;
     lpInsert(key, index + 1, loop, hashType, collRes);
   }
-  return;
+  return false;
 }
 
 
 
 void HashTable::cuckooInsert(int key, int index, int loop, int hashType, int collRes){
-
     int index1 = hashFunction(key);
     int index2 = hashFunction2(key);
-
   //if there are no collisions
   if(!table2[index2])
   {
@@ -178,7 +231,7 @@ void HashTable::cuckooInsert(int key, int index, int loop, int hashType, int col
 }
 
 
-//main insert function
+//main delete function
 bool HashTable::deleteItem(int key, int index, int hashType, int collRes)
 {
     switch(collRes){
@@ -186,10 +239,10 @@ bool HashTable::deleteItem(int key, int index, int hashType, int collRes)
         llDelete(key, index, hashType, collRes);
         break;
       case 2:
-        bstInsert(key, index, hashType, collRes);
+        bstDelete(key, index, hashType, collRes);
         break;
       case 3:
-        lpInsert(key, index, index, hashType, collRes);
+        // lpDelete(key, index, index, hashType, collRes);
         break;
       case 4:
         // cuckooInsert(key, index, index, hashType, collRes);
@@ -207,6 +260,7 @@ bool HashTable::deleteItem(int key, int index, int hashType, int collRes)
 bool HashTable::insertItem(int key, int hashType, int collRes)
 {
 
+
   //Compute the index by hash function
   int index;
   if (hashType == 1) {
@@ -216,7 +270,7 @@ bool HashTable::insertItem(int key, int hashType, int collRes)
   }
 
   //if there are no collisions
-  if(!searchItem(index, key, hashType, collRes))
+  if(!table[index])
   {
     table[index] = createNode(key, nullptr);
   }
@@ -239,6 +293,7 @@ bool HashTable::insertItem(int key, int hashType, int collRes)
         break;
     }
   }
+
   return true;
 }
 

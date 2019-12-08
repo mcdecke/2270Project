@@ -29,7 +29,6 @@ public:
 
     // inserts a key into hash table
     bool insertItem(int key,int hashType, int collRes);
-
     bool deleteItem(int key, int index, int hashType, int collRes);
 
     // hash function to map values to key
@@ -37,15 +36,26 @@ public:
     unsigned int hashFunction2(int key);
 
     void printTable();
+
+    //Linked List
     void llInsert(int key, int index, int hashType, int collRes);
-    void llDelete(int key, int index, int hashType, int collRes);
-    void lpInsert(int key, int index, int loop, int hashType, int collRes);
+    bool llDelete(int key, int index, int hashType, int collRes);
+
+    //BST
+    // - insert
+    void bstInsert(int key, int index, int hashType, int collRes);
+    node* addNodeHelper(node* currNode, int key);
+    // - delete
+    void bstDelete(int key, int index, int hashType, int collRes);
+    node* deleteNodeHelper(node* currNode, int key);
+
+    //Linear Probing
+    // void lpDelete(int key, int index, int loop, int hashType, int collRes);
+    bool lpInsert(int key, int index, int loop, int hashType, int collRes);
+
 
     void cuckooInsert(int key, int index, int loop, int hashType, int collRes);
 
-
-    void bstInsert(int key, int index, int hashType, int collRes);
-    node* addNodeHelper(node* currNode, int key);
 
     node* searchItem(int index, int key, int hashType, int collRes);
     node* searchKeyHelper(node* currNode, int data);

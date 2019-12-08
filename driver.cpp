@@ -65,7 +65,6 @@ void deleter(ofstream& myfile, int hashType, int collRes){
       holder[count] = num;
       count++;
   }
-
   //gets correct index based on hash
   count = 0;
     for (int i = 0; i < 100; i++) {
@@ -77,18 +76,14 @@ void deleter(ofstream& myfile, int hashType, int collRes){
       }
       //deletes if it is found.
       if (ht.searchItem(index, holder[i], hashType, collRes)) {
-        count++;
-        ht.deleteItem(holder[i], index, hashType, collRes);
-      } else {
-        cout <<  "didn't find "<<holder[i] << endl;
+         if(ht.deleteItem(index, holder[i], hashType, collRes) == 0){
+           count++;
+         }
       }
     }
   cout << "deleted " << count << " items." << endl;
   stop(t, myfile);
 }
-
-
-
 
 //Times the lookup of 100 items from the list to see if they are in the load.
 //Returns the time taken.
@@ -100,13 +95,11 @@ void lookUp(ofstream& myfile, int hashType, int collRes){
   string number;
   ifstream fs; // input stream OBJECT
   fs.open("random.csv");
-
   while (getline(fs, number, ',')) {
       num = stoi(number);
       holder[count] = num;
       count++;
   }
-
   count = 0;
     for (int i = 0; i < 100; i++) {
       int index;
@@ -117,12 +110,13 @@ void lookUp(ofstream& myfile, int hashType, int collRes){
       }
 
       if (ht.searchItem(index, holder[i], hashType, collRes)) {
+        // cout <<  "found "<<holder[i] << endl;
         count++;
       } else {
-        cout <<  "didn't find "<<holder[i] << endl;
+        // cout <<  "didn't find "<<holder[i] << endl;
       }
     }
-    cout << count << " things in table" << endl;
+  cout << count << " things from table" << endl;
   stop(t, myfile);
 }
 
@@ -207,13 +201,9 @@ int chooseColl(){
 int main(int argc, char* argv[])
 {
 
-  int x = chooseHash();
-  int y = chooseColl();
-  double load = chooseLoad();
-
-  //set up tables
-
-
+    int x = chooseHash();
+    int y = chooseColl();
+    double load = chooseLoad();
 
     string filename = "";
   	if (argc < 2) {
@@ -227,16 +217,15 @@ int main(int argc, char* argv[])
   	ifstream fs; // input stream OBJECT
   	fs.open(filename);
 
-    // // 10009 is count of buckets in hash table
-
     string number;
     int num;
     int place, timer;
-    int counter, newCount = 0;
+    int counter, k = 0;
+    bool newCount = false;
+    //array to hold all items
     int holder[40000];
 
 
-    timer = start();
     ofstream myfile;
     myfile.open("output.csv", ios_base::app);
 
@@ -246,35 +235,46 @@ int main(int argc, char* argv[])
         holder[counter] = num;
 
         ht.insertItem(num, x, y);
+        // cout << "inserted" << num << endl;
         counter++;
         double g = double(counter)/double(TABLE_SIZE);
-        if ((load - .0001) < g && g < (load + .0001) && newCount == 0) {
+        // cout << g << endl;
+        if ((load - .0001) < g && g < (load + .0001) && newCount == false) {
           // start timer for insert once we reach load, within bounds
-          // newCount++;
+          // cout << "load reached" << endl;
           // timer = start();
+          // newCount = true;
 
-          //reached load
+          //load reached
           break;
         }
+
+        //Timer function.
         //times 100 inserts to avoid 0 time.
-        // newCount++;
-        // if (newCount == 100) {
-        //
-        //   stop(timer, myfile);
+        // if (newCount) {
+        //   k++;
+        //   if (k == 100) {
+        //     newCount = false;
+        //     stop(timer, myfile);
+        //     break;
+        //   }
         // }
+
     }
 
-    cout << "Inserted " << counter << " elements." << endl
-    << "Starting lookup." << endl;
+    //Timer
+    // if (newCount) {
+    //   stop(timer, myfile);
+    // }
+
+    cout << "Inserted " << counter << " elements." << endl;
 
 
     // getRandom(holder, randomFile);
 
-
-
     lookUp(myfile, x, y);
 
-    deleter(myfile, x, y);
+    // deleter(myfile, x, y);
 
     // ht.printTable();
 
