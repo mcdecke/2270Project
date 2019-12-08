@@ -202,31 +202,31 @@ int main(int argc, char* argv[])
         // cout << g << endl;
         if ((load - .0001) < g && g < (load + .0001) && newCount == false) {
           // start timer for insert once we reach load, within bounds
-          // cout << "load reached" << endl;
-          // timer = start();
-          // newCount = true;
+          cout << "load reached" << endl;
+          timer = start();
+          newCount = true;
 
           //load reached
-          break;
+          // break;
         }
 
         //Timer function.
         //times 100 inserts to avoid 0 time.
-        // if (newCount) {
-        //   k++;
-        //   if (k == 100) {
-        //     newCount = false;
-        //     stop(timer, myfile);
-        //     break;
-        //   }
-        // }
+        if (newCount) {
+          k++;
+          if (k == 100) {
+            newCount = false;
+            stop(timer, myfile);
+            break;
+          }
+        }
 
     }
 
-    //Timer
-    // if (newCount) {
-    //   stop(timer, myfile);
-    // }
+    // Timer
+    if (newCount) {
+      stop(timer, myfile);
+    }
 
     cout << "Inserted " << counter << " elements." << endl;
 
@@ -236,6 +236,7 @@ int main(int argc, char* argv[])
     lookUp(myfile, x, y);
 
     deleter(myfile, x, y);
+    myfile << endl;
 
     // ht.printTable();
 

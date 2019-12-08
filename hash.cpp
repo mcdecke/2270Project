@@ -257,6 +257,7 @@ bool HashTable::lpDelete(int index, int key, int loop, int hashType, int collRes
   return false;
 }
 
+
 //////////////////
 ///Cuckoo hashing
 ////////////////
@@ -273,6 +274,10 @@ void HashTable::cuckooInsert(int key, int index, int loop, int hashType, int col
     table2[index2] = createNode(key, nullptr);
   return;
 }
+
+
+
+
 
 /////
 //main delete function
