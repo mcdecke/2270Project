@@ -61,11 +61,6 @@ node* HashTable::searchKeyHelper(node* currNode, int key){
 node* HashTable::searchItem(int index, int key, int hashType, int collRes)
 {
   if (!table[index]) {
-    //for Cuckoo
-    // if (collRes == 4 && !table2[index]) {
-    //   // cout << "not in either table" << endl;
-    //   return NULL;
-    // }
     return NULL;
   }
 
@@ -103,6 +98,17 @@ node* HashTable::searchItem(int index, int key, int hashType, int collRes)
       }
       // cout <<"table fully searched - not found" << endl;
       return NULL;
+    }
+    if (collRes == 4){
+      int index1 = hashFunction(key); // == index
+      int index2 = hashFunction2(key);
+      //delete if first possible place.
+      if (table[index1] && table[index1]->key == key){
+        return table[index1];
+      }
+      else if(table[index2] && table[index2]->key == key){
+        return table[index2];
+      }
     }
   return NULL;
 }
@@ -261,15 +267,28 @@ bool HashTable::lpDelete(int index, int key, int loop, int hashType, int collRes
 ///Cuckoo hashing
 ////////////////
 
-void cuckooHelper(){
+bool HashTable::cuckooDelete(int key, int index, int loop, int hashType, int collRes){
 
+  int index1 = hashFunction(key); // == index
+  int index2 = hashFunction2(key);
+  //delete if first possible place.
+  if (table[index1]){
+    table[index1]->key = -1;
+    return true;
+  }
+  else {
+    //or delete the 2nd spot
+    table[index2]->key = -1;
+    return true;
+  }
+  //nothing to delete
+  return false;
 }
 
 void HashTable::cuckooInsert(int key, int index, int loop, int hashType, int collRes){
     int index1 = hashFunction(key); // == index
     int index2 = hashFunction2(key);
 
-    // cout << "key: " << key << "index: " << index1 << "id2: " << index2 << endl;
   //if there are no collisions
   if(!table[index2])
   {
@@ -279,8 +298,6 @@ void HashTable::cuckooInsert(int key, int index, int loop, int hashType, int col
   }
 
   if (table[index2]) {
-    // cout << key << " collision with " << table[index2]->key << endl;
-    // cout << index2 << " collision with " << table[index2] << endl;
     //add to new table
     table2[index2] = createNode(key, nullptr);
 
@@ -289,7 +306,6 @@ void HashTable::cuckooInsert(int key, int index, int loop, int hashType, int col
     //new data goes to first spot
     table[index1]->key = key;
     //data that was in first spot goes to it's second
-    // cout << temp << " temp " << endl;
 
     if (!table[hashFunction2(temp)]) {
       table[hashFunction2(temp)]  = createNode(temp, nullptr);
@@ -300,6 +316,7 @@ void HashTable::cuckooInsert(int key, int index, int loop, int hashType, int col
     else{
       temp = table[hashFunction2(temp)]->key;
       if(index == loop){
+        cout << "Loop found, resize table" << endl;
         return;
       }
       cuckooInsert(temp, index, loop, hashType, collRes);
@@ -330,7 +347,7 @@ bool HashTable::deleteItem(int key, int index, int hashType, int collRes)
         lpDelete(key, index, key, hashType, collRes);
         break;
       case 4:
-        // cuckooInsert(key, index, index, hashType, collRes);
+        cuckooDelete(key, index, index, hashType, collRes);
         break;
       default:
         break;

@@ -53,7 +53,7 @@
 
 \begin{document}
 
-\title{Data Type Graphs}
+\title{Data Type Comparisons}
 \author{Mac Decker} 
 \date{\today}
 
@@ -62,19 +62,23 @@
 \section{Introduction}
 Given two different hashing algorithms and four types of collision resolution: linear probing, chaining with a linked list, chaining with a binary search tree and cuckoo hashing; our goal is to compare the time performance of the insertion, deletion and lookup of a group of 100 elements at various load factors. 
 
-\section{Procedure}
+\section{Procedure and Methodology}
 We will use an array of binary search trees with a left and right pointer to store our hashed data for each type of collision resolution. 
 \begin{itemize}
 	\item The linear probing implementation only needs the base array to store our data. 
 	\item Utilizing only the left branch will give us the functionality of a linked list.
 	\item Adding the right branch and forcing balancing will give us the functionality of our binary search tree. 
-	\item For the cuckoo hashing we first try to put the hashed value in our array and if there is a collision we try the second hash function, this so far only requires the base array. If there is a collision again at the second hash value, the new item overwrites the original collision, and the overwritten number is moved to the second hash value. This can cause a cycle if something would eventually move itself. Keeping track of what moved an item and what it moved in the left and right pointers of the binary search tree will allow us to know when we have a loop, if an item shows up twice on one branch, which will let us know when to resize the array.
+	\item For the cuckoo hashing we first try to put the hashed value in our array and if there is a collision we try the second hash function, this so far only requires the base array. If there is a collision again at the second hash value, the new item overwrites the original collision, and the overwritten number is moved to the second hash value. This can cause a cycle if something would eventually move itself. Keeping track of what moved an item will let us know when to resize the array.
 \end{itemize} 
 
-The program times the insert, delete and search functions in groups of 100 to get measurable results.
+We started by creating an associative array of numbers pulled at most once randomly from the data set.
+\\
+After that, program takes the desired hashing algorithm, collision resolution and load input from the user, inserts data until the desired load value is achieved and then runs the different variations of the insert, lookup and delete functions in groups of 100 to get more measurable results.
 
 
 \section{Graphs}
+
+\subsection{Data Set 1:}
 
 \begin{tikzpicture}
   \begin{axis}[ 
@@ -182,9 +186,6 @@ The program times the insert, delete and search functions in groups of 100 to ge
     ] 
   \end{axis}
 \end{tikzpicture}
-
-
-
 
 \begin{tikzpicture}
   \begin{axis}[ 
@@ -294,18 +295,203 @@ The program times the insert, delete and search functions in groups of 100 to ge
   \end{axis}
 \end{tikzpicture}
 
+\subsection{Data Set 2:}
+
+\begin{tikzpicture}
+  \begin{axis}[ 
+    title={Linked List Performance vs. Load},
+    xlabel={Load},
+    ylabel={mean time - ($\mu$ s)}
+  ] 
+    \addplot [
+    	color=blue,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 101)(.2,107)(.5,67)(.7,63)(.9,65)(1,55)(2,52)(3,49)(3.9,54)
+    };
+    ] 
+     \addplot [
+    	color=red,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 121)(.2,140)(.5,113)(.7,124)(.9,128)(1,153)(2,133)(3,194)(3.9,209)
+    };
+    ] 
+    ] 
+     \addplot [
+    	color=yellow,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 75)(.2,83)(.5,104)(.7, 118)(.9,122)(1,162)(2,183)(3,254)(3.9,304)
+    };
+    \legend{Insert, Lookup, Delete}
+    ] 
+  \end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+  \begin{axis}[ 
+    title={Binary Search Tree Performance vs. Load},
+    xlabel={Load},
+    ylabel={mean time - ($\mu$ s)}
+  ] 
+    \addplot [
+    	color=blue,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 101)(.2,108)(.5,65)(.7,65)(.9,57)(1,54)(2,54)(3,53)(3.9,51)
+    };
+    ] 
+     \addplot [
+    	color=red,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 129)(.2,119)(.5,129)(.7,118)(.9,129)(1,136)(2,120)(3,125)(3.9,164)
+    };
+    ] 
+    ] 
+     \addplot [
+    	color=yellow,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 121)(.2,82)(.5,107)(.7, 109)(.9,123)(1,143)(2,156)(3,134)(3.9,192)
+    };
+    \legend{Insert, Lookup, Delete}
+    ] 
+  \end{axis}
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+  \begin{axis}[ 
+    title={Binary Search Tree Performance vs. Load},
+    xlabel={Load},
+    ylabel={mean time - ($\mu$ s)}
+  ] 
+    \addplot [
+    	color=blue,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 101)(.2,108)(.5,65)(.7,65)(.9,57)(1,54)(2,54)(3,53)(3.9,51)
+    };
+    ] 
+     \addplot [
+    	color=red,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 129)(.2,119)(.5,129)(.7,118)(.9,129)(1,136)(2,120)(3,125)(3.9,164)
+    };
+    ] 
+    ] 
+     \addplot [
+    	color=yellow,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 121)(.2, 82)(.5,107)(.7, 109)(.9,123)(1,143)(2,156)(3,134)(3.9,192)
+    };
+    \legend{Insert, Lookup, Delete}
+    ] 
+  \end{axis}
+\end{tikzpicture}
+
+
+\begin{tikzpicture}
+  \begin{axis}[ 
+    title={Linear Probing Performance vs. Load},
+    xlabel={Load},
+    ylabel={mean time - ($\mu$ s)}
+  ] 
+    \addplot [
+    	color=blue,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 101)(.2,107)(.5,68)(.7,66)(.9,114)(1,1757)
+    };
+    ] 
+     \addplot [
+    	color=red,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 80)(.2,112)(.5,340)(.7,380)(.9,349)(1,136)
+    };
+    ] 
+    ] 
+     \addplot [
+    	color=yellow,
+    	mark=square,
+    	]
+    coordinates {
+    	(.1, 58)(.2, 101)(.5, 296)(.7, 336)(.9,320)(1,334)
+    };
+    \legend{Insert, Lookup, Delete}
+    ] 
+  \end{axis}
+\end{tikzpicture}
+
+
+\subsection{Cuckoo Hashing}
+
+\begin{tikzpicture}
+  \begin{axis}[ 
+    title={Cuckoo Hashing Performance vs. Table Size at .1 load},
+    xlabel={Table Size},
+    ylabel={mean time - ($\mu$ s)}
+  ] 
+    \addplot [
+    	color=blue,
+    	mark=square,
+    	]
+    coordinates {
+    	(10009, 100)(20011, 75)(40087,106) (100003, 64)
+    };
+    ] 
+     \addplot [
+    	color=red,
+    	mark=square,
+    	]
+    coordinates {
+    	(10009, 131)(20011, 131)(40087, 148)(100003, 139)
+    };
+    ] 
+    ] 
+     \addplot [
+    	color=yellow,
+    	mark=square,
+    	]
+    coordinates {
+    	(10009, 117)(20011, 77)(40087, 77)(100003, 100)
+    };
+    \legend{Insert, Lookup, Delete}
+    ] 
+  \end{axis}
+\end{tikzpicture}
+
+
 \section{Results}
 	A close analysis of the graphs shows a few things. 
 	\begin{itemize}
-		\item Inserting a value is faster than deleting and searching, unless trying to insert into a full array. Deleting also appears faster than searching, but they were typically close together. 
-		\item Linear probing scales the worst with load.
+		\item Inserting a value appears faster than deleting and searching, unless trying to insert into a full array. 
+		\item Linear probing and cuckoo hashing scales the worst with load.
 		\item Binary search tree outperforms linked list for collision resolution.
+		\item The second hashing function appears to perform better overall.
 	\end{itemize}
 	
 	The general performances of inserting, deleting and searching is consistent with what was expected from the code. The insert function typically can insert the value, and if not it resolves the collision until it finds a spot and continues, so part of the time there is never a second step. The delete function and search function both search in the initial array location, and have to compare that to their key before being able to attempt any collision resolution, so it makes sense that they take longer to perform. 
-\\
-	The decrease in linear probings performance after the load was around .8 is unexpected, as well as the increase in performance time at smaller loads for all of the resolution types. A larger data set, and better equipment, would help us see if the numbers are consistent.
-
+	
+For the cuckoo hashing, the load never was able to get above .2 before hitting a loop, so it was interesting see how performances changed with table size at a constant load. From what data was collected it appears that lookup of a cuckoo hash stays fairly consistent in this regard, where insert and delete might gain an advantage from a larger hash table.
+	
+	The decrease in linear probings performance after the load was around .8 is unexpected, as well as the increase in performance time at smaller loads for all of the resolution types. The data around a load of .2 was more likely to be inconsistent with what I was expecting, usually rising before an expected dip. Though that could easily be from a small data size, as sometimes it felt like my laptops charge also had an affect. It was also unusual that deleting appeared faster than lookups in the first data set, but it was reversed in the second. A larger data set, and better equipment, would help us see if the numbers are consistent, or an artifact of the setup.
 
 \end{document}
 

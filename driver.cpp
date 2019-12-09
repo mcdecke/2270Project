@@ -119,7 +119,9 @@ void deleter(ofstream& myfile, int hashType, int collRes){
       }
       //deletes if it is found.
       if (ht.searchItem(index, holder[i], hashType, collRes)) {
+
           ht.deleteItem(index, holder[i], hashType, collRes);
+          cout <<  "deleted "<< holder[i] << endl;
       }
     }
   stop(t, myfile);
@@ -150,7 +152,7 @@ void lookUp(ofstream& myfile, int hashType, int collRes){
       }
 
       if (ht.searchItem(index, holder[i], hashType, collRes)) {
-        cout <<  "!found "<< holder[i] << endl;
+        cout <<  "found "<< holder[i] << endl;
       } else {
         // cout <<  "didn't find "<<holder[i] << endl;
       }
@@ -236,6 +238,7 @@ int main(int argc, char* argv[])
     lookUp(myfile, x, y);
 
     deleter(myfile, x, y);
+
     myfile << endl;
 
     // ht.printTable();
@@ -243,36 +246,3 @@ int main(int argc, char* argv[])
 
     return 0;
 }
-
-
-
-
-
-
-// int hash(int x, int key, int y){
-//   switch (x){
-//     case 1: ht.insertItem(key, x, y);
-//     case 2: ht.insertItem(key, x, y);
-//   }
-// }
-
-// void place(int key, int index, int cnt, int n){
-//
-//   if(cnt == n){
-//     cout << "cycle present, resize" << endl;
-//     return;
-//   }
-//
-//   for (int i = 0; i < 2; i++) {
-//     positions[i] = hash(i+1, key);
-//     if (table[positions[i]] == key) {
-//       return;
-//     }
-//   }
-// }
-//
-// void cuckoo(int key, int n){
-//   for (int i, count = 0; i < n; i++, count = 0;) {
-//     place(key, 0, count, n);
-//   }
-// }

@@ -34,6 +34,7 @@ public:
     unsigned int hashFunction(int key);
     unsigned int hashFunction2(int key);
 
+    //prints table and linked list
     void printTable();
 
     //Linked List
@@ -55,7 +56,10 @@ public:
     bool lpInsert(int key, int index, int loop, int hashType, int collRes);
     bool lpDelete(int key, int index, int loop, int hashType, int collRes);
 
+    //Cuckoo
     void cuckooInsert(int key, int index, int loop, int hashType, int collRes);
+    bool cuckooDelete(int key, int index, int loop, int hashType, int collRes);
+
 
     node* searchItem(int index, int key, int hashType, int collRes);
     node* searchKeyHelper(node* currNode, int data);
