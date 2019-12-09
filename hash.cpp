@@ -261,16 +261,52 @@ bool HashTable::lpDelete(int index, int key, int loop, int hashType, int collRes
 ///Cuckoo hashing
 ////////////////
 
+void cuckooHelper(){
+
+}
+
 void HashTable::cuckooInsert(int key, int index, int loop, int hashType, int collRes){
-    int index1 = hashFunction(key);
+    int index1 = hashFunction(key); // == index
     int index2 = hashFunction2(key);
+
+    // cout << "key: " << key << "index: " << index1 << "id2: " << index2 << endl;
   //if there are no collisions
-  if(!table2[index2])
+  if(!table[index2])
   {
-    cout << "inserting" << endl;
-    table[index1] = createNode(key, nullptr);
+    // cout << "inserting to second spot" << key << endl;
+    table[index2] = createNode(key, nullptr);
+    return;
   }
+
+  if (table[index2]) {
+    // cout << key << " collision with " << table[index2]->key << endl;
+    // cout << index2 << " collision with " << table[index2] << endl;
+    //add to new table
     table2[index2] = createNode(key, nullptr);
+
+    int temp = table[index1]->key;
+
+    //new data goes to first spot
+    table[index1]->key = key;
+    //data that was in first spot goes to it's second
+    // cout << temp << " temp " << endl;
+
+    if (!table[hashFunction2(temp)]) {
+      table[hashFunction2(temp)]  = createNode(temp, nullptr);
+      // cout << "moving kicked item, everything resolved." << endl;
+      return;
+    }
+
+    else{
+      temp = table[hashFunction2(temp)]->key;
+      if(index == loop){
+        return;
+      }
+      cuckooInsert(temp, index, loop, hashType, collRes);
+      return;
+    }
+  }
+
   return;
 }
 
@@ -333,7 +369,7 @@ bool HashTable::insertItem(int key, int hashType, int collRes)
         lpInsert(key, index, index, hashType, collRes);
         break;
       case 4:
-        // cuckooInsert(key, index, index, hashType, collRes);
+        cuckooInsert(key, index, index, hashType, collRes);
         break;
       default:
         break;
